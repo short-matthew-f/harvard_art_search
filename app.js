@@ -190,7 +190,7 @@ function renderObjectRecordFeature(objectRecord) {
       ${ factHTML('Culture', culture, 'culture') }
       ${ factHTML('Style', style) }
       ${ factHTML('Technique', technique, 'technique' )}
-      ${ factHTML('Medium', medium, 'medium') }
+      ${ factHTML('Medium', medium.toLowerCase(), 'medium') }
       ${ factHTML('Dimensions', dimensions) }
       ${ 
         people 
