@@ -2,13 +2,14 @@ const API = {
   ROOT: 'https://api.harvardartmuseums.org',
   RESOURCES: {
     OBJECT: 'object', // 234230
+    CLASSIFICATION: 'classification', // 57
+    CENTURY: 'century', // 47
+    /* below here are unused keys */
     PERSON: 'person', // 39506
     EXHIBITION: 'exhibition', // 4652
     PUBLICATION: 'publication', // 15751
     GALLERY: 'gallery', // 64
     SPECTRUM: 'spectrum',
-    CLASSIFICATION: 'classification', // 57
-    CENTURY: 'century', // 47
     COLOR: 'color', // 147
     CULTURE: 'culture', // 255
     GROUP: 'group', // 27
@@ -102,8 +103,6 @@ function buildSearchString() {
 
 function updatePreview(records, info) {
   const root = $('#preview');
-
-  console.log(info)
   
   if (info.next) {
     root.find('.next')
@@ -178,8 +177,6 @@ function renderObjectRecordFeature(objectRecord) {
     creditline,
   } = objectRecord;
 
-  console.log(objectRecord)
-
   return $(`<div class="object-feature">
     <header>
       <h3>${ title }<h3>
@@ -196,7 +193,7 @@ function renderObjectRecordFeature(objectRecord) {
         people 
         ? people.map(
             person => factHTML('Person', person.displayname, 'person')
-          ).join('<span>, <span>')
+          ).join('')
         : ''
       }
       ${ factHTML('Department', department) }
@@ -238,14 +235,6 @@ function factHTML(title, content, searchTerm = null) {
   `
 }
 
-function peopleHTML(people) {
-  people.map(person => $(`
-    <b>Name</b><span><a href=${ person.displayname || person.name || 'unknown' }</span>
-    <b>Birthplace</b><span>${ person.birthplace || 'unknown' }</span>
-    <b>Birth - Death</b><span>${ person.displaydate || 'unknown' }</span>
-  `));
-}
-
 function photosHTML(images, primaryimageurl) {
   if (images.length > 0) {
     return images.map(
@@ -275,9 +264,7 @@ $('#search').on('submit', async function (event) {
 $('#preview .next, #preview .previous').on('click', async function () {
   try {
     const url = $(this).data('url');
-
-    console.log('url', url);
-
+    
     const response = await fetch(url);
     const { records, info } = await response.json();  
     
