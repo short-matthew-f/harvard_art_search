@@ -262,15 +262,18 @@ $('#search').on('submit', async function (event) {
 });
 
 $('#preview .next, #preview .previous').on('click', async function () {
+  onFetchStart();
+
   try {
     const url = $(this).data('url');
-    
     const response = await fetch(url);
     const { records, info } = await response.json();  
     
     updatePreview(records, info);
   } catch (error) {
     console.error(error);
+  } finally {
+    onFetchEnd();
   }
 });
 
