@@ -69,24 +69,28 @@ async function fetchAllClassifications() {
 }
 
 async function prefetchCategoryLists() {
-  const [
-    classifications, centuries
-  ] = await Promise.all([
-    fetchAllClassifications(),
-    fetchAllCenturies()
-  ]);
-
-  $('.classification-count').text(`(${ classifications.length })`);
-  classifications.forEach(classification => {
-    $('#select-classification')
-      .append($(`<option value="${ classification.name }">${ classification.name }</option>`));
-  });
-  
-  $('.century-count').text(`(${ centuries.length })`);
-  centuries.forEach(century => {
-    $('#select-century')
-      .append($(`<option value="${ century.name }">${ century.name }</option>`));
-  });
+  try {
+    const [
+      classifications, centuries
+    ] = await Promise.all([
+      fetchAllClassifications(),
+      fetchAllCenturies()
+    ]);
+    
+    $('.classification-count').text(`(${ classifications.length })`);
+    classifications.forEach(classification => {
+      $('#select-classification')
+        .append($(`<option value="${ classification.name }">${ classification.name }</option>`));
+    });
+    
+    $('.century-count').text(`(${ centuries.length })`);
+    centuries.forEach(century => {
+      $('#select-century')
+        .append($(`<option value="${ century.name }">${ century.name }</option>`));
+    });
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 function buildSearchString() {
